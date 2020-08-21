@@ -41,7 +41,7 @@ public class ListViewAdapter extends ArrayAdapter<UserContact> {
         {
             LayoutInflater layoutInflater = LayoutInflater.from(mContext);
             convertView = layoutInflater.inflate(mLayoutId, null, false);
-            viewHolder.name = (TextView) convertView.findViewById(R.id.contact_name);
+            viewHolder.name = (TextView) convertView.findViewById(R.id.friend_name);
             convertView.setTag(viewHolder);
         }
         else

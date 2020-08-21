@@ -4,9 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -28,7 +32,37 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("phonenumber", userContact.getPhoneNumber());
             startActivity(intent);
         }
+
     };
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return  true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.map:
+                //code xử lý khi bấm menu1
+
+                Toast.makeText(this, "Activate Zoom Mode", Toast.LENGTH_SHORT).show();
+
+                break;
+            case R.id.addFriend:
+                //code xử lý khi bấm menu2
+
+                Toast.makeText(this, "Refresh Images", Toast.LENGTH_SHORT).show();
+                break;
+
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

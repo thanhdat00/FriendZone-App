@@ -7,18 +7,23 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ADD"
-        android:id="@+id/add_button"
-        android:onClick="onClickAddButton"
-        />
+<!--    <Button-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="ADD"-->
+<!--        android:id="@+id/add_button"-->
+<!--        android:onClick="onClickAddButton"-->
+<!--        />-->
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/contact_listview"
-        />
+     <ListView
+    android:id="@+id/contact_listview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:columnWidth="@android:dimen/thumbnail_width"
+    android:numColumns="auto_fit" />
+    <!--        android:layout_marginTop="100dp"-->
+
 
 </LinearLayout>
