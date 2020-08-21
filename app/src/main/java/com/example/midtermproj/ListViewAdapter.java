@@ -42,6 +42,7 @@ public class ListViewAdapter extends ArrayAdapter<UserContact> {
             LayoutInflater layoutInflater = LayoutInflater.from(mContext);
             convertView = layoutInflater.inflate(mLayoutId, null, false);
             viewHolder.name = (TextView) convertView.findViewById(R.id.friend_name);
+            viewHolder.info=(TextView) convertView.findViewById(R.id.friend_information);
             convertView.setTag(viewHolder);
         }
         else
@@ -51,11 +52,16 @@ public class ListViewAdapter extends ArrayAdapter<UserContact> {
 
         UserContact userContact = mContactList.get(position);
         viewHolder.name.setText(userContact.getName());
+        viewHolder.info.setText(userContact.getPhoneNumber());
+
 
         return convertView;
     }
 
     static class ViewHolder{
         TextView name;
+        TextView info;
+
+
     }
 }
