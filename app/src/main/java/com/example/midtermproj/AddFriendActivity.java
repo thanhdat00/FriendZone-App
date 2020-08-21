@@ -73,6 +73,10 @@ public class AddFriendActivity extends AppCompatActivity {
         }
     }
 
+    public void onClick(View view) {
+
+    }
+
 
 //    @Override
 //    protected void onActivityResult(int requestCode, int resultCode, Intent    data) {
