@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("name", userContact.getName());
             intent.putExtra("address", userContact.getAddress());
             intent.putExtra("phonenumber", userContact.getPhoneNumber());
+            intent.putExtra("photoid", userContact.getPhotoID());
+
             startActivity(intent);
         }
 
@@ -53,8 +55,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.addFriend:
                 //code xử lý khi bấm menu2
-
+                Intent intent= new Intent(MainActivity.this, AddFriendActivity.class);
                 Toast.makeText(this, "Refresh Images", Toast.LENGTH_SHORT).show();
+                startActivity(intent);
                 break;
 
             default:
@@ -75,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadData() {
         mContactArrayList = new ArrayList<>();
-        UserContact userContact = new UserContact("Thanh Dat", "093534923", "khoa hoc tu nhien");
+        UserContact userContact = new UserContact("Thanh Dat", "093534923", "khoa hoc tu nhien",R.drawable.logo_quan_con_lan);
         mContactArrayList.add(userContact);
     }
 

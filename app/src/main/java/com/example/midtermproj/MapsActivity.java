@@ -71,7 +71,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent intent = getIntent();
 
         mUserContact = new UserContact(intent.getStringExtra("name"), intent.getStringExtra("phonenumber")
-                , intent.getStringExtra("address"));
+                , intent.getStringExtra("address"), intent.getIntExtra("photoid",0)) ;
     }
 
     // Get the current Location
