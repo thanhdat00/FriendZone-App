@@ -2,15 +2,11 @@ package com.example.midtermproj;
 
 public class UserContact {
 
-    public void setPhotoID(int mPhotoID) {
-        this.mPhotoID = mPhotoID;
-    }
+
 
     int mPhotoID;
 
-    public int getPhotoID() {
-        return mPhotoID;
-    }
+
 
     String mName;
     String mPhoneNumber;
@@ -23,6 +19,9 @@ public class UserContact {
         this.mAddress = address;
     }
 
+    public int getPhotoID() {
+        return mPhotoID;
+    }
 
     public String getName() {
         return mName;
@@ -46,5 +45,9 @@ public class UserContact {
 
     public void setAddress(String mAddress) {
         this.mAddress = mAddress;
+    }
+
+    public void setPhotoID(int mPhotoID) {
+        this.mPhotoID = mPhotoID;
     }
 }

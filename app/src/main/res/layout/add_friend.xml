@@ -11,91 +11,99 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="9">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_centerInParent="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/img">
+            android:background="@drawable/img"
+            android:orientation="vertical"
+            android:id="@+id/addField"
+            >
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/button_avatar"
-                android:layout_margin="10dp"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_baseline_add_24"
+                android:layout_margin="10dp"
                 android:background="@drawable/button_custom"
-                android:onClick="onClick"
-                app:civ_border_width="2dp"
-                app:civ_border_color="@color/colorAccent"/>
+                android:onClick="onClickAddPhoto"
+                android:src="@drawable/ic_baseline_add_24"
+                app:civ_border_color="@color/colorAccent"
+                app:civ_border_width="2dp" />
+
             <EditText
                 android:id="@+id/button_name_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Name"
-                android:textColor="@color/black"
-
-                android:textSize="20sp"
                 android:inputType="text"
+
                 android:maxLines="1"
-                />
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
             <EditText
                 android:id="@+id/button_phone_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Phone number"
-                android:textColor="@color/black"
-                android:textSize="20sp"
                 android:inputType="phone"
                 android:maxLines="1"
-                />
+                android:textColor="@color/black"
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/button_address_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
                 android:hint="Address"
                 android:inputType="text"
                 android:maxLines="1"
                 android:textColor="@color/black"
-                android:textSize="20sp"
-                android:layout_marginBottom="20dp"/>
+                android:textSize="20sp" />
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_below="@+id/addField"
+            >
+
+            <Button
+                android:id="@+id/cancelButton"
+                android:onClick="onClickCancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/button_custom"
+                android:text="Cancel"
+                android:textColor="#808080"
+                android:theme="@style/Widget.AppCompat.Button.Borderless" />
+
+            <Button
+
+                android:id="@+id/saveButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/button_custom"
+                android:onClick="onClickSave"
+                android:text="Save"
+                android:textColor="#808080"
+                android:theme="@style/Widget.AppCompat.Button.Borderless" />
+            <!--            android:background=" @drawable/img"-->
+        </LinearLayout>
     </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="bottom">
-
-        <Button
-            android:id="@+id/cancelButton"
-
-            android:background="@drawable/button_custom"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Cancel"
-            android:layout_weight="1"
-            android:theme="@style/Widget.AppCompat.Button.Borderless"
-            android:textColor="@color/black" />
-        <Button
-
-            android:id="@+id/saveButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Save"
-            android:layout_weight="1"
-            android:background="@drawable/button_custom"
-            android:theme="@style/Widget.AppCompat.Button.Borderless"
-            android:textColor="@color/black"/>
-        <!--            android:background=" @drawable/img"-->
-    </LinearLayout>
 
 
 </LinearLayout>

@@ -22,7 +22,8 @@
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     android:columnWidth="@android:dimen/thumbnail_width"
-    android:numColumns="auto_fit" />
+    android:numColumns="auto_fit"
+    android:focusable="true"/>
     <!--        android:layout_marginTop="100dp"-->
 
 

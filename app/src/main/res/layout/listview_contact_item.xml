@@ -3,13 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
     android:background="@drawable/button_custom"
     >
 
 
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/img_logo"
+        android:id="@+id/avatar"
         android:layout_margin="10dp"
         android:layout_width="90dp"
         android:layout_height="90dp"
@@ -49,10 +50,15 @@
 
 
     </LinearLayout>
-    <!--    <ImageButton-->
-    <!--        android:background="@android:color/transparent"-->
-    <!--        android:id="@+id/PhoneCall"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent"-->
-    <!--        android:src="@drawable/ic_baseline_call_24"></ImageButton>-->
+
+
+        <ImageButton
+            android:background="@android:color/transparent"
+            android:id="@+id/PhoneCall"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:onClick="onClickCalling"
+            android:src="@drawable/ic_baseline_call_24"
+            android:focusable="false"
+           />
 </LinearLayout>
