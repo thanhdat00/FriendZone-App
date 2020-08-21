@@ -13,68 +13,71 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class AddFriendActivity extends AppCompatActivity {
 
     ImageButton avatar;
+    ArrayList<UserContact> mContactList;
+    EditText mNameTextView;
+    EditText mPhoneTextView;
+    EditText mAddressTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_friend);
 
-
-
+        loadData();
+        initDataForNewContact();
     }
 
-    private boolean checkIfAlreadyhavePermission() {
-        int result = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
-        if (result == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
+    private void initDataForNewContact() {
+        mNameTextView = (EditText) findViewById(R.id.button_name_input);
+        mPhoneTextView = (EditText) findViewById(R.id.button_phone_input);
+        mAddressTextView = (EditText) findViewById(R.id.button_address_input);
+    }
+
+    //get data from main
+    private void loadData() {
+        Intent intent = getIntent();
+        mContactList =(ArrayList<UserContact>) intent.getSerializableExtra("contactlist");
+    }
+
+    public void onClickCancel(View view) {
+        Intent intent = new Intent();
+        setResult(RESULT_CANCELED, intent);
+        finish();
+    }
+
+    public void onClickSave(View view) {
+        String name = mNameTextView.getText().toString();
+        String phone = mPhoneTextView.getText().toString();
+        String address = mAddressTextView.getText().toString();
+
+        // Make alert when user do not enter enough info
+        if (name.length() == 0 || phone.length() == 0 || address.length() == 0)
+        {
+            Toast.makeText(this, "Please enter enough info", Toast.LENGTH_LONG).show();
         }
-    }
-
-    private void requestForSpecificPermission() {
-        ActivityCompat.requestPermissions(AddFriendActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Toast.makeText(AddFriendActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            }
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-                // other 'case' lines to check for other
-                // permissions this app might request
+        else {
+            mContactList.add(new UserContact(name, phone, address, 0));
+            //send the contact list back to main activity
+            Intent intent = new Intent();
+            intent.putExtra("listcontactback", mContactList);
+            setResult(RESULT_OK, intent);
+            finish(); // calls on destroy
         }
-    }
-
-    public void onClick(View view) {
-
     }
 
 
 //    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent    data) {
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        super.onActivityResult(requestCode, resultCode, data);
 //
 //        if(requestCode == GALLERY_REQUEST && resultCode == RESULT_OK){

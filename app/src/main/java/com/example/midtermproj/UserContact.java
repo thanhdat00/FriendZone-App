@@ -1,6 +1,8 @@
 package com.example.midtermproj;
 
-public class UserContact {
+import java.io.Serializable;
+
+public class UserContact implements Serializable {
 
     public void setPhotoID(int mPhotoID) {
         this.mPhotoID = mPhotoID;
