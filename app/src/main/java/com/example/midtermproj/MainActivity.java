@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadData() {
         mContactArrayList = new ArrayList<>();
-        UserContact userContact = new UserContact("Thanh Dat", "093534923", "166 ly thai to");
+        UserContact userContact = new UserContact("Thanh Dat", "093534923", "khoa hoc tu nhien");
         mContactArrayList.add(userContact);
     }
 
