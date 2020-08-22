@@ -1,5 +1,6 @@
 package com.example.midtermproj;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -12,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -68,6 +70,73 @@ public class MainActivity extends AppCompatActivity {
         initComponent();
     }
 
+    private void loadData() {
+        mContactArrayList = new ArrayList<>();
+        if (getArrayList() != null) mContactArrayList = getArrayList();
+    }
+
+    private void initComponent() {
+        // init share preference
+
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mEditor = mPreferences.edit();
+        // init list view
+        InitListView();
+    }
+
+    private void InitListView() {
+        mContactListView = (ListView) findViewById(R.id.contact_listview);
+        mContactListViewAdapter = new ListViewAdapter(this,R.layout.listview_contact_item, mContactArrayList);
+        mContactListView.setAdapter(mContactListViewAdapter);
+        mContactListView.setOnItemClickListener(mListViewItemOnClick);
+        registerForContextMenu(mContactListView);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId() == R.id.contact_listview) {
+            ListView lv = (ListView) v;
+            AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            UserContact obj = (UserContact) lv.getItemAtPosition(acmi.position);
+
+            menu.add("Delete Contact");
+            menu.add("Edit Contact");
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
+                .getMenuInfo();
+        switch (item.getTitle().toString())
+        {
+            case "Delete Contact":
+                Toast.makeText(this, "Delete Contact", Toast.LENGTH_LONG).show();
+                mContactArrayList.remove(info.position);
+                mContactListViewAdapter.notifyDataSetChanged();
+                return true;
+            case  "Edit Contact":
+                Toast.makeText(this, "Edit Contact", Toast.LENGTH_LONG).show();
+                IntentToEditContact(info);
+
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    private void IntentToEditContact(AdapterView.AdapterContextMenuInfo info) {
+        Intent intent = new Intent(MainActivity.this, EditContactActivity.class);
+        intent.putExtra("contactlist", mContactArrayList);
+        intent.putExtra("pos", info.position);
+        startActivityForResult(intent, REQ_CODE);
+    }
+
+    private void intentToAddFriend() {
+        Intent intent= new Intent(MainActivity.this, AddFriendActivity.class);
+        intent.putExtra("contactlist", mContactArrayList);
+        startActivityForResult(intent, REQ_CODE);
+    }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return  true;
@@ -94,12 +163,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void intentToAddFriend() {
-        Intent intent= new Intent(MainActivity.this, AddFriendActivity.class);
-        intent.putExtra("contactlist", mContactArrayList);
-        startActivityForResult(intent, REQ_CODE);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -111,27 +174,6 @@ public class MainActivity extends AppCompatActivity {
                 InitListView();
             }
         }
-    }
-
-    private void loadData() {
-        mContactArrayList = new ArrayList<>();
-        if (getArrayList() != null) mContactArrayList = getArrayList();
-    }
-
-    private void initComponent() {
-        // init share preference
-
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mEditor = mPreferences.edit();
-        // init list view
-        InitListView();
-    }
-
-    private void InitListView() {
-        mContactListView = (ListView) findViewById(R.id.contact_listview);
-        mContactListViewAdapter = new ListViewAdapter(this,R.layout.listview_contact_item, mContactArrayList);
-        mContactListView.setAdapter(mContactListViewAdapter);
-        mContactListView.setOnItemClickListener(mListViewItemOnClick);
     }
 
     // get arrray list
