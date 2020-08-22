@@ -54,6 +54,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         PLAIN
     }
 
+    private static final int REQ_PERMISSION = 1 ;
+
     private static final String[] POLYLINE_STYLE_OPTIONS = new String[]{
             "PLAIN",
             "DOTTED"
@@ -80,6 +82,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         loadData();
+
     }
 
     /**
@@ -95,7 +98,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        enableMyLocation();
+        //enableMyLocation();
+        if(checkPermission())
+            mMap.setMyLocationEnabled(true);
+        else askPermission();
         displayMarker();
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -124,6 +130,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void loadData() {
         Intent intent = getIntent();
 
+
         mUserContact = new UserContact(intent.getStringExtra("name"), intent.getStringExtra("phonenumber")
                 , intent.getStringExtra("address"), intent.getStringExtra("photo")) ;
 
@@ -135,21 +142,58 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-    // Get the current Location
-    private void enableMyLocation() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
-                        PackageManager.PERMISSION_GRANTED) {
-            mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        }  else {
-            ActivityCompat.requestPermissions(this, new String[] {
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION },
-                    1);
+
+    private void askPermission() {
+
+        ActivityCompat.requestPermissions(
+                this,
+                new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+                REQ_PERMISSION
+        );
+    }
+
+    private boolean checkPermission() {
+
+        // Ask for permission if it wasn't granted yet
+        return (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED );
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch ( requestCode ) {
+            case REQ_PERMISSION: {
+                if ( grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED ){
+                    // Permission granted
+                    if(checkPermission())
+                        mMap.setMyLocationEnabled(true);
+
+                } else {
+                    // Permission denied
+
+                }
+                break;
+            }
         }
     }
+
+    // Get the current Location
+//    private void enableMyLocation() {
+//        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+//                PackageManager.PERMISSION_GRANTED &&
+//                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
+//                        PackageManager.PERMISSION_GRANTED) {
+//            mMap.setMyLocationEnabled(true);
+//            mMap.getUiSettings().setMyLocationButtonEnabled(true);
+//        }  else {
+//            ActivityCompat.requestPermissions(this, new String[] {
+//                            Manifest.permission.ACCESS_FINE_LOCATION,
+//                            Manifest.permission.ACCESS_COARSE_LOCATION },
+//                    1);
+//        }
+//    }
 
     @NonNull
     @Override
