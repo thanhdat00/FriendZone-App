@@ -36,7 +36,7 @@ public class AddFriendActivity extends AppCompatActivity {
     EditText mPhoneTextView;
     EditText mAddressTextView;
     ImageView mImage;
-    Uri pickedImage;
+    Uri pickedImage=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +71,7 @@ public class AddFriendActivity extends AppCompatActivity {
         String phone = mPhoneTextView.getText().toString();
         String address = mAddressTextView.getText().toString();
         String photo=null;
-        if (pickedImage!=Uri.EMPTY) {
+        if (pickedImage!=null) {
             photo = pickedImage.toString();
         }
         else
