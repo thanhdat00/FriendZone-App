@@ -119,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initComponent() {
-
         // init share preference
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
