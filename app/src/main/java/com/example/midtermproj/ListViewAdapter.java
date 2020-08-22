@@ -2,6 +2,10 @@ package com.example.midtermproj;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +20,7 @@ import androidx.annotation.Nullable;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +29,7 @@ public class ListViewAdapter extends ArrayAdapter<UserContact> {
     private Context mContext;
     private int mLayoutId;
     private ArrayList<UserContact> mContactList;
-
+    private Bitmap bmp;
 
 
     public ListViewAdapter(@NonNull Context context, int resource, @NonNull List<UserContact> objects) {
@@ -61,9 +66,19 @@ public class ListViewAdapter extends ArrayAdapter<UserContact> {
         UserContact userContact = mContactList.get(position);
         viewHolder.name.setText(userContact.getName());
         viewHolder.info.setText(userContact.getPhoneNumber());
-        viewHolder.photo.setImageResource(userContact.getPhotoID()) ;
 
-            //call button
+        if(userContact.getPhotoID()!=null) {
+            try {
+                bmp = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), Uri.parse(userContact.getPhotoID()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            viewHolder.photo.setImageBitmap(bmp);
+        }
+        else {
+            viewHolder.photo.setImageResource(R.drawable.ic_launcher_background);
+        }
+        //call button
         ImageButton callButton = (ImageButton)  convertView.findViewById(R.id.PhoneCall);
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override

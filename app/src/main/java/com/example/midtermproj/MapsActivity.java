@@ -15,6 +15,7 @@ import androidx.loader.content.Loader;
 
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -71,7 +72,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent intent = getIntent();
 
         mUserContact = new UserContact(intent.getStringExtra("name"), intent.getStringExtra("phonenumber")
-                , intent.getStringExtra("address"), intent.getIntExtra("photoid",0)) ;
+                , intent.getStringExtra("address"), intent.getStringExtra("photo")) ;
     }
 
     // Get the current Location

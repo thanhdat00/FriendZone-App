@@ -1,27 +1,30 @@
 package com.example.midtermproj;
 
+import android.net.Uri;
+
 import java.io.Serializable;
 
 public class UserContact implements Serializable {
 
 
 
-    int mPhotoID;
 
 
 
     String mName;
     String mPhoneNumber;
     String mAddress;
+    String mPhotoID;
 
-    public UserContact(String mName, String phoneNumber, String address, int photoID) {
+
+    public UserContact(String mName, String phoneNumber, String address, String photoID) {
         this.mPhotoID= photoID;
         this.mName = mName;
         this.mPhoneNumber = phoneNumber;
         this.mAddress = address;
     }
 
-    public int getPhotoID() {
+    public String getPhotoID() {
         return mPhotoID;
     }
 
@@ -49,7 +52,7 @@ public class UserContact implements Serializable {
         this.mAddress = mAddress;
     }
 
-    public void setPhotoID(int mPhotoID) {
+    public void setPhotoID(String mPhotoID) {
         this.mPhotoID = mPhotoID;
     }
 }

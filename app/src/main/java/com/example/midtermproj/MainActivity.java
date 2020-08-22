@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("name", userContact.getName());
             intent.putExtra("address", userContact.getAddress());
             intent.putExtra("phonenumber", userContact.getPhoneNumber());
-            intent.putExtra("photoid", userContact.getPhotoID());
+            intent.putExtra("photo", userContact.getPhotoID());
 
             startActivity(intent);
         }
@@ -116,17 +116,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadData() {
         mContactArrayList = new ArrayList<>();
-//        UserContact userContact = new UserContact("Thanh Dat", "093534923", "khoa hoc tu nhien",R.drawable.logo_quan_con_lan);
-//        mContactArrayList.add(userContact);
         if (getArrayList() != null) mContactArrayList = getArrayList();
     }
 
     private void initComponent() {
 
         // init share preference
+
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mEditor = mPreferences.edit();
-
         // init list view
         InitListView();
     }

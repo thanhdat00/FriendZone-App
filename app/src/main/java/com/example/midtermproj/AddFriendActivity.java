@@ -9,6 +9,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
@@ -22,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class AddFriendActivity extends AppCompatActivity {
@@ -34,6 +36,7 @@ public class AddFriendActivity extends AppCompatActivity {
     EditText mPhoneTextView;
     EditText mAddressTextView;
     ImageView mImage;
+    Uri pickedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,14 +70,23 @@ public class AddFriendActivity extends AppCompatActivity {
         String name = mNameTextView.getText().toString();
         String phone = mPhoneTextView.getText().toString();
         String address = mAddressTextView.getText().toString();
+        String photo=null;
+        if (pickedImage!=Uri.EMPTY) {
+            photo = pickedImage.toString();
+        }
+        else
+        {
+             photo = null;
+        }
+//        Toast.makeText(this,photo,Toast.LENGTH_LONG).show();
 
         // Make alert when user do not enter enough info
-        if (name.length() == 0 || phone.length() == 0 || address.length() == 0)
+        if (name.length() == 0 || phone.length() == 0 || address.length() == 0 )
         {
             Toast.makeText(this, "Please enter enough info", Toast.LENGTH_LONG).show();
         }
         else {
-            mContactList.add(new UserContact(name, phone, address, R.drawable.logo_quan_con_lan));
+            mContactList.add(new UserContact(name, phone, address, photo));
             //send the contact list back to main activity
             Intent intent = new Intent();
             intent.putExtra("listcontactback", mContactList);
@@ -83,7 +95,7 @@ public class AddFriendActivity extends AppCompatActivity {
         }
     }
 
-    public void onClick(View view) {
+    public void onClickAddPhoto(View view) {
         Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
         // Start new activity with the LOAD_IMAGE_RESULTS to handle back the results when image is picked from the Image Gallery.
@@ -94,21 +106,28 @@ public class AddFriendActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        Bitmap bmp = null;
         // Here we need to check if the activity that was triggers was the Image Gallery.
         // If it is the requestCode will match the LOAD_IMAGE_RESULTS value.
         // If the resultCode is RESULT_OK and there is some data we know that an image was picked.
         if (requestCode == LOAD_IMAGE_RESULTS && resultCode == RESULT_OK && data != null) {
             // Let's read picked image data - its URI
-            Uri pickedImage = data.getData();
+            pickedImage = data.getData();
             // Let's read picked image path using content resolver
             String[] filePath = { MediaStore.Images.Media.DATA };
             Cursor cursor = getContentResolver().query(pickedImage, filePath, null, null, null);
             cursor.moveToFirst();
-            String imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
+
 
             // Now we need to set the GUI ImageView data with data read from the picked file.
-            mImage.setImageBitmap(BitmapFactory.decodeFile(imagePath));
+            //            //change to bitmap
+            try {
+                bmp = MediaStore.Images.Media.getBitmap(this.getContentResolver(), pickedImage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //set imageView
+            mImage.setImageBitmap(bmp);
 
             // At the end remember to close the cursor or you will end with the RuntimeException!
             cursor.close();
