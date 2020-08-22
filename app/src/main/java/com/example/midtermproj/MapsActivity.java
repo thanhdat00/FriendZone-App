@@ -228,10 +228,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             else
             {
+                bmp = BitmapFactory.decodeResource(this.getResources(),R.drawable.ic_person_round);
+                bmp = Bitmap.createScaledBitmap(bmp, bmp.getWidth()/8, bmp.getHeight()/8, false);
+                BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bmp);
                 mUserGeo = data;
                 mMarker = mMap.addMarker(new MarkerOptions().position(data)
                         .title(mUserContact.getName())
-                        .snippet(mUserContact.mAddress));
+                        .snippet(mUserContact.mAddress)
+                        .icon(bitmapDescriptor));
             }
 
 
