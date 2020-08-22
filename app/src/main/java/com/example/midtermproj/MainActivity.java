@@ -81,11 +81,10 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.map:
                 //code xử lý khi bấm menu1
-                Toast.makeText(this, "Activate Zoom Mode", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "nothing", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.addFriend:
-                Toast.makeText(this, "Refresh Images", Toast.LENGTH_SHORT).show();
                 intentToAddFriend();
                 break;
 
@@ -116,8 +115,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadData() {
         mContactArrayList = new ArrayList<>();
-//        UserContact userContact = new UserContact("Thanh Dat", "093534923", "khoa hoc tu nhien",R.drawable.logo_quan_con_lan);
-//        mContactArrayList.add(userContact);
         if (getArrayList() != null) mContactArrayList = getArrayList();
     }
 

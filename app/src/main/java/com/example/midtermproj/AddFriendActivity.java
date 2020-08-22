@@ -83,7 +83,7 @@ public class AddFriendActivity extends AppCompatActivity {
         }
     }
 
-    public void onClick(View view) {
+    public void onClickAddPhoto(View view) {
         Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
         // Start new activity with the LOAD_IMAGE_RESULTS to handle back the results when image is picked from the Image Gallery.
