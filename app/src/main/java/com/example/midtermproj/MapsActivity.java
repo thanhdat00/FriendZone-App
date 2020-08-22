@@ -14,9 +14,13 @@ import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.widget.Toast;
 
@@ -25,6 +29,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -32,6 +38,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
@@ -60,6 +67,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private MaterialDialog materialDialog;
     private Polyline polyline;
     private LatLng mUserGeo;
+    private Bitmap bmp=null;
+    private TextToSpeech mText2Speech;
+    private boolean mIsText2SpeechReady = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +97,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         enableMyLocation();
         displayMarker();
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if (mIsText2SpeechReady)
+                {
+                    mText2Speech.speak(mUserContact.getAddress(),
+                            TextToSpeech.QUEUE_FLUSH, null);
+                    Toast.makeText(getApplicationContext(),
+                            mUserContact.getAddress(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+                return false;
+            }
+        });
     }
 
     private void displayMarker() {
@@ -101,6 +126,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mUserContact = new UserContact(intent.getStringExtra("name"), intent.getStringExtra("phonenumber")
                 , intent.getStringExtra("address"), intent.getStringExtra("photo")) ;
+
+        mText2Speech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                mIsText2SpeechReady = true;
+            }
+        });
     }
 
     // Get the current Location
@@ -133,11 +165,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onLoadFinished(@NonNull Loader<LatLng> loader, LatLng data) {
+
         if (data != null)
         {
-            mUserGeo = data;
-            mMarker = mMap.addMarker(new MarkerOptions().position(data)
-                                                        .title(mUserContact.getName()));
+            if (mUserContact.getPhotoID()!= null) {
+                try {
+                    bmp = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(mUserContact.getPhotoID()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                bmp = Bitmap.createScaledBitmap(bmp, bmp.getWidth()/8, bmp.getHeight()/8, false);
+                BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bmp);
+                mUserGeo = data;
+                mMarker = mMap.addMarker(new MarkerOptions().position(data)
+                        .title(mUserContact.getName())
+                        .snippet(mUserContact.mAddress)
+                        .icon(bitmapDescriptor));
+            }
+            else
+            {
+                mUserGeo = data;
+                mMarker = mMap.addMarker(new MarkerOptions().position(data)
+                        .title(mUserContact.getName())
+                        .snippet(mUserContact.mAddress));
+            }
+
+
             mMap.animateCamera(CameraUpdateFactory.zoomTo(15),2000,null);
             CameraPosition cameraPosition = new CameraPosition.Builder().target(data).zoom(15).bearing(90).tilt(30).build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));

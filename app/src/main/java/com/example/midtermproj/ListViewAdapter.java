@@ -77,7 +77,7 @@ public class ListViewAdapter extends ArrayAdapter<UserContact> {
             viewHolder.photo.setImageBitmap(bmp);
         }
         else {
-            viewHolder.photo.setImageResource(R.drawable.ic_launcher_background);
+            viewHolder.photo.setImageResource(R.drawable.ic_baseline_person_pin_circle_24);
         }
         //call button
         ImageButton callButton = (ImageButton)  convertView.findViewById(R.id.PhoneCall);
