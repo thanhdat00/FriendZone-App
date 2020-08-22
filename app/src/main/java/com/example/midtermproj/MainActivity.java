@@ -81,11 +81,10 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.map:
                 //code xử lý khi bấm menu1
-                Toast.makeText(this, "Activate Zoom Mode", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "nothing", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.addFriend:
-                Toast.makeText(this, "Refresh Images", Toast.LENGTH_SHORT).show();
                 intentToAddFriend();
                 break;
 

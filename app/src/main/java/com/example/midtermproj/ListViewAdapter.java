@@ -2,6 +2,7 @@ package com.example.midtermproj;
 
 import android.content.Context;
 import android.content.Intent;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -63,7 +64,7 @@ public class ListViewAdapter extends ArrayAdapter<UserContact> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        UserContact userContact = mContactList.get(position);
+        final UserContact userContact = mContactList.get(position);
         viewHolder.name.setText(userContact.getName());
         viewHolder.info.setText(userContact.getPhoneNumber());
 
@@ -83,9 +84,9 @@ public class ListViewAdapter extends ArrayAdapter<UserContact> {
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "call u", Toast.LENGTH_LONG).show();
-//                Intent intent = new Intent(ctx,MapsActivity.class);
-//                mContext.startActivity(intent);
+                Uri number = Uri.parse("tel:" + userContact.getPhoneNumber());
+                Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
+                mContext.startActivity(callIntent);
         }
         });
         return convertView;
