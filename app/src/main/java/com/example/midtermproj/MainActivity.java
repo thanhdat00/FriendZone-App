@@ -1,32 +1,41 @@
 package com.example.midtermproj;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridView;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ListView mContactListView;
-    private ArrayList<UserContact> mContactArrayList=new ArrayList<>();
-    private ListViewAdapter mContactListViewAdapter;
+    private static final String TASKS = "dataArrayList";
+    private static final int REQ_CODE = 0;
 
+    private ListView mContactListView;
+    private ArrayList<UserContact> mContactArrayList;
+    private ListViewAdapter mContactListViewAdapter;
+    private SharedPreferences mPreferences;
+    private SharedPreferences.Editor mEditor;
 
     private ListView.OnItemClickListener mListViewItemOnClick = new ListView.OnItemClickListener() {
         @Override
@@ -42,41 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
             startActivity(intent);
         }
-
     };
-
-
-
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return  true;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            case R.id.map:
-                //code xử lý khi bấm menu1
-
-                Toast.makeText(this, "Activate Zoom Mode", Toast.LENGTH_SHORT).show();
-
-                break;
-            case R.id.addFriend:
-                //code xử lý khi bấm menu2
-                Intent intent= new Intent(MainActivity.this, AddFriendActivity.class);
-                Toast.makeText(this, "Refresh Images", Toast.LENGTH_SHORT).show();
-
-                startActivity(intent);
-                break;
-
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,32 +64,99 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        loadData();
+        initComponent();
+    }
 
-            for(int i = 0;i<15;++i) {
-                loadData();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return  true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+
+            case R.id.map:
+                //code xử lý khi bấm menu1
+                Toast.makeText(this, "Activate Zoom Mode", Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.addFriend:
+                Toast.makeText(this, "Refresh Images", Toast.LENGTH_SHORT).show();
+                intentToAddFriend();
+                break;
+
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void intentToAddFriend() {
+        Intent intent= new Intent(MainActivity.this, AddFriendActivity.class);
+        intent.putExtra("contactlist", mContactArrayList);
+        startActivityForResult(intent, REQ_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQ_CODE && data != null) {
+                mContactArrayList =
+                        (ArrayList<UserContact>) data.getSerializableExtra("listcontactback");
+                InitListView();
             }
-            initComponent();
-
+        }
     }
 
     private void loadData() {
-
-
-        String al = getIntent().getStringExtra("Name");
-        mContactArrayList.add(new UserContact(getIntent().getStringExtra("Name"),
-                getIntent().getStringExtra("Phone"), getIntent().getStringExtra("Address"),R.drawable.logo_quan_con_lan));
-
+        mContactArrayList = new ArrayList<>();
+//        UserContact userContact = new UserContact("Thanh Dat", "093534923", "khoa hoc tu nhien",R.drawable.logo_quan_con_lan);
+//        mContactArrayList.add(userContact);
+        if (getArrayList() != null) mContactArrayList = getArrayList();
     }
 
     private void initComponent() {
-        mContactListView = (ListView) findViewById(R.id.contact_listview);
 
+        // init share preference
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mEditor = mPreferences.edit();
+
+        // init list view
+        InitListView();
+    }
+
+    private void InitListView() {
+        mContactListView = (ListView) findViewById(R.id.contact_listview);
         mContactListViewAdapter = new ListViewAdapter(this,R.layout.listview_contact_item, mContactArrayList);
         mContactListView.setAdapter(mContactListViewAdapter);
         mContactListView.setOnItemClickListener(mListViewItemOnClick);
-
-
     }
+
+    // get arrray list
+    public ArrayList<UserContact> getArrayList(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Gson gson = new Gson();
+        String json = prefs.getString(TASKS, null);
+        Type type = new TypeToken<ArrayList<UserContact>>() {}.getType();
+        return gson.fromJson(json, type);
+    }
+
+    // save array list using sharedPreferences
+    public void saveArrayList(ArrayList<UserContact> list){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        editor.putString(TASKS, json);
+        editor.commit();     // This line is IMPORTANT !!!
+    }
+
     private boolean checkIfAlreadyhavePermission() {
         int result = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
         if (result == PackageManager.PERMISSION_GRANTED) {
@@ -154,7 +196,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveArrayList(mContactArrayList);
+    }
 
-    public void onClickAddButton(View view) {
+    @Override
+    protected void onStop() {
+        super.onStop();
+        saveArrayList(mContactArrayList);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        saveArrayList(mContactArrayList);
     }
 }

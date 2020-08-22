@@ -63,11 +63,12 @@ public class ListViewAdapter extends ArrayAdapter<UserContact> {
         viewHolder.info.setText(userContact.getPhoneNumber());
         viewHolder.photo.setImageResource(userContact.getPhotoID()) ;
 
+            //call button
         ImageButton callButton = (ImageButton)  convertView.findViewById(R.id.PhoneCall);
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "dwdwdw", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "call u", Toast.LENGTH_LONG).show();
 //                Intent intent = new Intent(ctx,MapsActivity.class);
 //                mContext.startActivity(intent);
         }
