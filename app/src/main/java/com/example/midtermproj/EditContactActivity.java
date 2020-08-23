@@ -67,7 +67,7 @@ public class EditContactActivity extends AppCompatActivity {
         String name = mNameTextView.getText().toString();
         String phone = mPhoneTextView.getText().toString();
         String address = mAddressTextView.getText().toString();
-        String photo=null;
+        String photo;
         if (pickedImage!=null) {
             photo = pickedImage.toString();
         }
@@ -86,6 +86,7 @@ public class EditContactActivity extends AppCompatActivity {
             mContactList.get(mPosition).setName(name);
             mContactList.get(mPosition).setPhoneNumber(phone);
             mContactList.get(mPosition).setAddress(address);
+            if (photo != null) mContactList.get(mPosition).setPhotoID(photo);
             //send the contact list back to main activity
             Intent intent = new Intent();
             intent.putExtra("listcontactback", mContactList);

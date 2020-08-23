@@ -70,7 +70,8 @@ public class AddFriendActivity extends AppCompatActivity {
         String name = mNameTextView.getText().toString();
         String phone = mPhoneTextView.getText().toString();
         String address = mAddressTextView.getText().toString();
-        String photo=null;
+
+        String photo;
         if (pickedImage!=null) {
             photo = pickedImage.toString();
         }
