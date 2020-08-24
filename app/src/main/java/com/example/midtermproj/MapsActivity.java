@@ -16,12 +16,15 @@ import androidx.loader.content.Loader;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -37,6 +40,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.PicassoProvider;
+import com.squareup.picasso.Target;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -172,28 +178,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 } else {
                     // Permission denied
-
                 }
                 break;
             }
         }
     }
-
-    // Get the current Location
-//    private void enableMyLocation() {
-//        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
-//                PackageManager.PERMISSION_GRANTED &&
-//                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
-//                        PackageManager.PERMISSION_GRANTED) {
-//            mMap.setMyLocationEnabled(true);
-//            mMap.getUiSettings().setMyLocationButtonEnabled(true);
-//        }  else {
-//            ActivityCompat.requestPermissions(this, new String[] {
-//                            Manifest.permission.ACCESS_FINE_LOCATION,
-//                            Manifest.permission.ACCESS_COARSE_LOCATION },
-//                    1);
-//        }
-//    }
 
     @NonNull
     @Override
@@ -213,18 +202,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (data != null)
         {
             if (mUserContact.getPhotoID()!= null) {
-                try {
-                    bmp = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(mUserContact.getPhotoID()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+                Picasso.get().load(mUserContact.getPhotoID())
+                        .into(new Target() {
+                            @Override
+                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                bmp = bitmap;
+                            }
+
+                            @Override
+                            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+                            }
+
+                            @Override
+                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                            }
+                        });
+
                 bmp = Bitmap.createScaledBitmap(bmp, bmp.getWidth()/8, bmp.getHeight()/8, false);
                 BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bmp);
                 mUserGeo = data;
                 mMarker = mMap.addMarker(new MarkerOptions().position(data)
                         .title(mUserContact.getName())
                         .snippet(mUserContact.mAddress)
-                        .icon(bitmapDescriptor));
+                        .icon(bitmapDescriptor) );
             }
             else
             {

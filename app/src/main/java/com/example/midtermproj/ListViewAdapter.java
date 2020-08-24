@@ -19,6 +19,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.squareup.picasso.Picasso;
+
 import org.w3c.dom.Text;
 
 import java.io.IOException;
@@ -31,7 +33,6 @@ public class ListViewAdapter extends ArrayAdapter<UserContact> {
     private int mLayoutId;
     private ArrayList<UserContact> mContactList;
     private Bitmap bmp;
-
 
     public ListViewAdapter(@NonNull Context context, int resource, @NonNull List<UserContact> objects) {
         super(context, resource, objects);
@@ -69,12 +70,7 @@ public class ListViewAdapter extends ArrayAdapter<UserContact> {
         viewHolder.info.setText(userContact.getPhoneNumber());
 
         if(userContact.getPhotoID()!=null) {
-            try {
-                bmp = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), Uri.parse(userContact.getPhotoID()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            viewHolder.photo.setImageBitmap(bmp);
+            Picasso.get().load(userContact.getPhotoID()).into(viewHolder.photo);
         }
         else {
             viewHolder.photo.setImageResource(R.drawable.ic_baseline_person_pin_circle_24);
