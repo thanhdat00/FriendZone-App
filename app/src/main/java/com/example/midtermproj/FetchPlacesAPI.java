@@ -27,7 +27,7 @@ public class FetchPlacesAPI {
         try{
 
             url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input="+queryString+
-                    "&inputtype=textquery&fields=geometry&key=AIzaSyDqg2W4eCUfCyn0VSu-JkoXlBMrQzNDMFs";
+                    "&inputtype=textquery&fields=geometry&key=AIzaSyCdIeCeXbjyNKMWe-Gq13s-G-pY7b6_Cs8";
 
             URL requestURL = new URL(url);
 
