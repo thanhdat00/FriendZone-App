@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, EditContactActivity.class);
         intent.putExtra("contactlist", mContactArrayList);
         intent.putExtra("pos", info.position);
-        startActivityForResult(intent, REQ_CODE);
+                startActivityForResult(intent, REQ_CODE);
     }
 
     private void intentToAddFriend() {
