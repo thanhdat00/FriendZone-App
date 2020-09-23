@@ -45,6 +45,10 @@
 
     </style>
 
+    <style name="error_appearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">12sp</item>
+    </style>
     <style name="AppLoginTheme" parent="Theme.AppCompat.Light.NoActionBar">
         Customize your theme here.
         <item name="colorPrimary">@color/colorPrimary</item>
