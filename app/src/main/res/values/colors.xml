@@ -9,5 +9,9 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="xanh_call">#6F99D7</color>
+    <color name="login_from_details_light">#1affffff</color>
+    <color name="login_from_details">#ccffffff</color>
+    <color name="login_from_details_medium">#66ffffff</color>
+
 
 </resources>

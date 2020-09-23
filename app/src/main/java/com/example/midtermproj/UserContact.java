@@ -5,17 +5,10 @@ import android.net.Uri;
 import java.io.Serializable;
 
 public class UserContact implements Serializable {
-
-
-
-
-
-
     String mName;
     String mPhoneNumber;
     String mAddress;
     String mPhotoID;
-
 
     public UserContact(String mName, String phoneNumber, String address, String photoID) {
         this.mPhotoID= photoID;
