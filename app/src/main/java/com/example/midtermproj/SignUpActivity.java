@@ -8,19 +8,24 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpActivity extends AppCompatActivity {
     private TextInputLayout textInputUsername;
     private TextInputLayout textInputPassword;
     private TextInputLayout textInputEmail;
 
+    FirebaseDatabase rootNode;
+    DatabaseReference reference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        textInputUsername = findViewById(R.id.username_input);
-        textInputEmail = findViewById(R.id.email_input);
-        textInputPassword= findViewById(R.id.password_input);
+        textInputUsername = findViewById(R.id.username_input_register);
+        textInputEmail = findViewById(R.id.email_input_register);
+        textInputPassword= findViewById(R.id.password_input_register);
     }
 
     private boolean validateUsername() {
@@ -59,20 +64,22 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-
-
-    public void onClickCreateAccount(View view) {
+    public void onClickRegister(View view) {
         if(!validateEmail() | !validatePassword() | !validateUsername()) {
             return;
         }
-        String input = "Username: " + textInputUsername.getEditText().getText().toString();
-        input+="\n";
-        input += "Email: " + textInputEmail.getEditText().getText().toString();
-        input+="\n";
-        input += "Password: " + textInputPassword.getEditText().getText().toString();
 
-        Toast.makeText(this,input, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-        this.startActivity(intent);
+        rootNode = FirebaseDatabase.getInstance();
+        reference = rootNode.getReference("UserAccount");
+
+        String userName = textInputUsername.getEditText().getText().toString();
+        String password = textInputPassword.getEditText().getText().toString();
+        String email = textInputEmail.getEditText().getText().toString();
+
+        User newUser = new User(userName, email, password);
+
+        reference.child(userName).setValue(newUser);
+
+        this.finish();
     }
 }

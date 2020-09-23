@@ -1,5 +1,6 @@
 package com.example.midtermproj;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -8,6 +9,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
     private TextInputLayout textInputUsername;
@@ -45,22 +52,58 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
-    public void onClickLogin(View view) {
+    public void logInUser(View view)
+    {
         if(!validateEmail() | !validatePassword()) {
             return;
         }
-        String input = "Email: " + textInputUsername.getEditText().getText().toString();
-        input+="\n";
-        input += "Password: " + textInputPassword.getEditText().getText().toString();
+        else {
+            isUser();
+        }
 
-        Toast.makeText(this,input, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        this.startActivity(intent);
     }
 
-    public void JumptoCreateAccountLayout(View view) {
+    private void isUser() {
+        final String userEnteredUserName = textInputUsername.getEditText().getText().toString().trim();
+        final String userEnteredPassword = textInputPassword.getEditText().getText().toString().trim();
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("UserAccount");
+        Query checkUser = reference.orderByChild("userName").equalTo(userEnteredUserName);
+
+        checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.exists()) {
+                    String passwordFromDB =
+                            dataSnapshot.child(userEnteredUserName).child("password").getValue(String.class);
+
+                    if (passwordFromDB.equals(userEnteredPassword)){
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "wrong password", Toast.LENGTH_LONG).show();
+                    }
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "NO USER EXISTS", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void onClickLogin(View view) {
+        logInUser();
+    }
+
+    public void onClickCreateAccount(View view) {
         Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
-        this.startActivity(intent);
+        startActivity(intent);
     }
 }

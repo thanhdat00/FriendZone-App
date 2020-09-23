@@ -62,8 +62,6 @@ public class MainActivity extends AppCompatActivity {
 //        setContentView(R.layout.login_layout);
        setContentView(R.layout.activity_main);
 
-
-
         //int MyVersion = Build.VERSION.SDK_INT;
         //if (MyVersion > Build.VERSION_CODES.LOLLIPOP_MR1) {
             if (!checkIfAlreadyhavePermission()) {
