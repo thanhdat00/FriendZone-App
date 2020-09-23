@@ -58,13 +58,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        int MyVersion = Build.VERSION.SDK_INT;
-        if (MyVersion > Build.VERSION_CODES.LOLLIPOP_MR1) {
+
+//        setContentView(R.layout.login_layout);
+       setContentView(R.layout.activity_main);
+
+
+
+        //int MyVersion = Build.VERSION.SDK_INT;
+        //if (MyVersion > Build.VERSION_CODES.LOLLIPOP_MR1) {
             if (!checkIfAlreadyhavePermission()) {
                 requestForSpecificPermission();
             }
-        }
+        //}
 
         loadData();
         initComponent();
@@ -137,6 +142,12 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, REQ_CODE);
     }
 
+    private void intentToShowAllFriend(){
+        Intent intent= new Intent(MainActivity.this, MapActivity2.class);
+        intent.putExtra("contactlist", mContactArrayList);
+        startActivityForResult(intent, REQ_CODE);
+    }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return  true;
@@ -150,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.map:
                 //code xử lý khi bấm menu1
+                intentToShowAllFriend();
                 Toast.makeText(this, "nothing", Toast.LENGTH_SHORT).show();
                 break;
 

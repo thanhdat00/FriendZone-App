@@ -18,6 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".MapActivity2"></activity>
         <activity android:name=".EditContactActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -30,15 +31,16 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
         <activity
             android:name=".LoginActivity"
             android:theme="@style/AppLoginTheme">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".AddFriendActivity"
             android:theme="@style/AddTheme" />
@@ -46,10 +48,7 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
             android:theme="@style/AppMapTheme" />
-        <activity android:name=".MainActivity">
-
-
-        </activity>
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>
