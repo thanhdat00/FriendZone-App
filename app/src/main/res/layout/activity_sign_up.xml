@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_login"
+    android:background="@drawable/bg_signup"
     style="@style/AppLoginTheme"
     >
 
@@ -28,7 +28,7 @@
         android:id="@+id/logo"
         android:layout_width="95dp"
         android:layout_height="95dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="40dp"
         android:src="@drawable/ic_baseline_pin_drop_24"
         app:layout_constraintEnd_toStartOf="@+id/guideline_right"
         app:layout_constraintStart_toStartOf="@id/guideline_left"
@@ -53,13 +53,43 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:background="@null"
-            android:hint="Username | Email"
-            android:inputType="textEmailAddress"
+            android:hint="Username"
+            android:inputType="text"
             android:maxLines="1"
-           android:padding="5dp"
+            android:padding="5dp"
             android:textColor="@color/white"
             android:textColorHint="@color/login_from_details"
             android:textSize="22sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/email_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+        app:layout_constraintStart_toStartOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/username_input"
+        app:errorEnabled="true"
+        android:padding="5dp"
+        android:background="@drawable/et_bg"
+        android:textColorHint="@color/login_from_details"
+        app:errorTextAppearance="@style/error_appearance"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@null"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:padding="5dp"
+            android:maxLines="1"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+
+            />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -69,7 +99,7 @@
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline_right"
         app:layout_constraintStart_toStartOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/username_input"
+        app:layout_constraintTop_toBottomOf="@id/email_input"
         app:passwordToggleEnabled="true"
         app:passwordToggleTint="@color/login_from_details"
         app:errorEnabled="true"
@@ -77,7 +107,7 @@
         android:background="@drawable/et_bg"
         android:textColorHint="@color/login_from_details"
         app:errorTextAppearance="@style/error_appearance"
-       >
+        >
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -92,56 +122,37 @@
 
             />
     </com.google.android.material.textfield.TextInputLayout>
-<!--    <EditText-->
-<!--       -->
-<!--        android:background="@drawable/et_bg"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="20dp"-->
-<!--        android:inputType="textPassword"-->
-<!--        android:hint="Password"-->
-<!--        android:textColorHint="@color/login_from_details"-->
-<!--        android:padding="16dp"-->
-<!--        android:maxLines="1"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:textSize="18sp"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/guideline_right"-->
-<!--        app:layout_constraintStart_toStartOf="@id/guideline_left"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/button_account"-->
-<!--        android:drawableRight="@drawable/ic_baseline_remove_red_eye_24" />-->
+    <!--    <EditText-->
+    <!--       -->
+    <!--        android:background="@drawable/et_bg"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="20dp"-->
+    <!--        android:inputType="textPassword"-->
+    <!--        android:hint="Password"-->
+    <!--        android:textColorHint="@color/login_from_details"-->
+    <!--        android:padding="16dp"-->
+    <!--        android:maxLines="1"-->
+    <!--        android:textColor="@color/black"-->
+    <!--        android:textSize="18sp"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/guideline_right"-->
+    <!--        app:layout_constraintStart_toStartOf="@id/guideline_left"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/button_account"-->
+    <!--        android:drawableRight="@drawable/ic_baseline_remove_red_eye_24" />-->
 
 
     <Button
-        android:id="@+id/button_login"
-        android:layout_width="180dp"
-        android:layout_height="60dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/btn_bg"
-        android:onClick="onClickLogin"
-        android:padding="16dp"
-        android:text="Log In"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/password_input"
-        tools:ignore="MissingConstraints" />
-
-    <Button
-        android:id="@+id/button_jump_account"
+        android:id="@+id/button_create_account"
         android:layout_width="180dp"
         android:layout_height="60dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginStart="183dp"
         android:layout_marginLeft="183dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="116dp"
+        android:layout_marginRight="116dp"
         android:background="@drawable/btn_bg"
-        android:onClick="JumptoCreateAccountLayout"
+        android:onClick="onClickCreateAccount"
         android:padding="16dp"
         android:text="Sign Up"
         android:textAllCaps="false"

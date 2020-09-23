@@ -9,26 +9,40 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 
-public class LoginActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
     private TextInputLayout textInputUsername;
     private TextInputLayout textInputPassword;
+    private TextInputLayout textInputEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_sign_up);
         textInputUsername = findViewById(R.id.username_input);
+        textInputEmail = findViewById(R.id.email_input);
         textInputPassword= findViewById(R.id.password_input);
     }
 
-    private boolean validateEmail() {
-        String emailInput = textInputUsername.getEditText().getText().toString().trim();
-        if (emailInput.isEmpty())
+    private boolean validateUsername() {
+        String usernameInput = textInputUsername.getEditText().getText().toString().trim();
+        if (usernameInput.isEmpty())
         {
             textInputUsername.setError("Field cannot be empty");
             return false;
         } else {
             textInputUsername.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validateEmail() {
+        String emailInput = textInputEmail.getEditText().getText().toString().trim();
+        if (emailInput.isEmpty())
+        {
+            textInputEmail.setError("Field cannot be empty");
+            return false;
+        } else {
+            textInputEmail.setError(null);
             return true;
         }
     }
@@ -46,21 +60,19 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void onClickLogin(View view) {
-        if(!validateEmail() | !validatePassword()) {
+
+    public void onClickCreateAccount(View view) {
+        if(!validateEmail() | !validatePassword() | !validateUsername()) {
             return;
         }
-        String input = "Email: " + textInputUsername.getEditText().getText().toString();
+        String input = "Username: " + textInputUsername.getEditText().getText().toString();
+        input+="\n";
+        input += "Email: " + textInputEmail.getEditText().getText().toString();
         input+="\n";
         input += "Password: " + textInputPassword.getEditText().getText().toString();
 
         Toast.makeText(this,input, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        this.startActivity(intent);
-    }
-
-    public void JumptoCreateAccountLayout(View view) {
-        Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
         this.startActivity(intent);
     }
 }
