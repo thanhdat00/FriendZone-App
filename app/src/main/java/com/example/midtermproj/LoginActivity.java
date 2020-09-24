@@ -83,11 +83,13 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                     else {
+                        textInputPassword.setError("wrong password");
                         Toast.makeText(getApplicationContext(), "wrong password", Toast.LENGTH_LONG).show();
                     }
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "NO USER EXISTS", Toast.LENGTH_LONG).show();
+                    textInputUsername.setError("Username is not exists");
+                    Toast.makeText(getApplicationContext(), "Username is not exists", Toast.LENGTH_LONG).show();
                 }
             }
 
