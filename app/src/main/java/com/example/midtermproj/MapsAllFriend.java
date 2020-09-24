@@ -90,10 +90,7 @@ public class MapsAllFriend extends FragmentActivity implements OnMapReadyCallbac
         else askPermission();
         displayMarker();
 
-       // LatLng myLocation = new LatLng(mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude());
-
-       // mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
-        LatLng location = new LatLng(14.058324, 108.277199);
+        LatLng location = new LatLng(14.058324, 108.277199);  // location of VietNam
         mMap.animateCamera(CameraUpdateFactory.zoomTo(5),10,null);
         CameraPosition cameraPosition = new CameraPosition.Builder().target(location).zoom(6).bearing(90).tilt(30).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
