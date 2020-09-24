@@ -2,4 +2,6 @@
     <string name="app_name">FR1ENDZ0NE</string>
     <string name="title_activity_maps">Map</string>
     <string name="api_key">AIzaSyCdIeCeXbjyNKMWe-Gq13s-G-pY7b6_Cs8</string>
+    <string name="title_activity_maps2">Map</string>
+    <string name="title_activity_maps_all_friend">Map</string>
 </resources>

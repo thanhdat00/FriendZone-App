@@ -141,9 +141,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void intentToShowAllFriend(){
-        Intent intent= new Intent(MainActivity.this, MapActivity2.class);
+        Intent intent= new Intent(MainActivity.this, MapsAllFriend.class);
         intent.putExtra("contactlist", mContactArrayList);
-        startActivityForResult(intent, REQ_CODE);
+        startActivity(intent);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -10,24 +10,15 @@ import androidx.loader.content.Loader;
 
 import android.Manifest;
 import android.content.Intent;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
-
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -39,22 +30,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.PicassoProvider;
 import com.squareup.picasso.Target;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
+import java.util.ArrayList;
 
-import static com.example.midtermproj.GoogleMapHelper.buildCameraUpdate;
-import static com.example.midtermproj.GoogleMapHelper.getDefaultPolyLines;
-import static com.example.midtermproj.GoogleMapHelper.getDottedPolylines;
-import static com.example.midtermproj.UiHelper.showAlwaysCircularProgressDialog;
+public class MapsAllFriend extends FragmentActivity implements OnMapReadyCallback, LoaderManager.LoaderCallbacks<LatLng> {
 
-public class MapActivity2 extends FragmentActivity implements OnMapReadyCallback, LoaderManager.LoaderCallbacks<LatLng>, DirectionFinderListener  {
-
+    private GoogleMap mMap;
     private enum PolylineStyle {
         DOTTED,
         PLAIN
@@ -62,33 +45,25 @@ public class MapActivity2 extends FragmentActivity implements OnMapReadyCallback
 
     private static final int REQ_PERMISSION = 1 ;
 
-    private static final String[] POLYLINE_STYLE_OPTIONS = new String[]{
-            "PLAIN",
-            "DOTTED"
-    };
-
-    private PolylineStyle polylineStyle = PolylineStyle.PLAIN;
-
-    private GoogleMap mMap;
     private Marker mMarker;
+    private ArrayList<UserContact> userContactArrayList;
     private UserContact mUserContact;
-    private MaterialDialog materialDialog;
-    private Polyline polyline;
+
     private LatLng mUserGeo;
     private Bitmap bmp=null;
     private TextToSpeech mText2Speech;
     private boolean mIsText2SpeechReady = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.activity_maps_all_friend);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         loadData();
-
     }
 
     /**
@@ -104,50 +79,41 @@ public class MapActivity2 extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        // Add a marker in Sydney and move the camera
+//        LatLng sydney = new LatLng(-34, 151);
+//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
         //enableMyLocation();
         if(checkPermission())
             mMap.setMyLocationEnabled(true);
         else askPermission();
         displayMarker();
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                if (mIsText2SpeechReady)
-                {
-                    mText2Speech.speak(mUserContact.getAddress(),
-                            TextToSpeech.QUEUE_FLUSH, null);
-                    Toast.makeText(getApplicationContext(),
-                            mUserContact.getAddress(),
-                            Toast.LENGTH_SHORT
-                    ).show();
-                }
-                return false;
-            }
-        });
+
+       // LatLng myLocation = new LatLng(mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude());
+
+       // mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+        LatLng location = new LatLng(14.058324, 108.277199);
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(5),10,null);
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(location).zoom(6).bearing(90).tilt(30).build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
     private void displayMarker() {
 
-        Bundle queryBundle = new Bundle();
-        queryBundle.putString("queryString", mUserContact.getAddress());
-        getSupportLoaderManager().restartLoader(0,queryBundle, this);
+        for (int i=0; i<userContactArrayList.size(); i++) {
+            Bundle queryBundle = new Bundle();
+            mUserContact = userContactArrayList.get(i);
+            queryBundle.putString("queryString", mUserContact.getAddress());
+            getSupportLoaderManager().restartLoader(i, queryBundle, this);
+        }
     }
 
     private void loadData() {
         Intent intent = getIntent();
 
-
-        mUserContact = new UserContact(intent.getStringExtra("name"), intent.getStringExtra("phonenumber")
-                , intent.getStringExtra("address"), intent.getStringExtra("photo")) ;
-
-        mText2Speech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                mIsText2SpeechReady = true;
-            }
-        });
+        userContactArrayList = (ArrayList<UserContact>) intent.getSerializableExtra("contactlist");
     }
-
 
     private void askPermission() {
 
@@ -240,57 +206,11 @@ public class MapActivity2 extends FragmentActivity implements OnMapReadyCallback
                         .snippet(mUserContact.mAddress)
                         .icon(bitmapDescriptor));
             }
-
-
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(15),2000,null);
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(data).zoom(15).bearing(90).tilt(30).build();
-            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
     }
 
     @Override
     public void onLoaderReset(@NonNull Loader<LatLng> loader) {
 
-    }
-
-    public void onClickDirection(View view) {
-        String origin = String.valueOf(mMap.getMyLocation().getLatitude()) + ',' + String.valueOf(mMap.getMyLocation().getLongitude());
-
-        String destination = mUserGeo.latitude + "," + mUserGeo.longitude;
-        fetchDirections(origin, destination);
-    }
-
-    private void fetchDirections(String origin, String destination) {
-        try {
-            new DirectionFinder(this, origin, destination).execute();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onDirectionFinderStart() {
-        if (materialDialog == null)
-            materialDialog = showAlwaysCircularProgressDialog(this, "Fetching Directions...");
-        else materialDialog.show();
-    }
-
-    @Override
-    public void onDirectionFinderSuccess(List<Route> routes) {
-        if (materialDialog != null && materialDialog.isShowing())
-            materialDialog.dismiss();
-
-        if (!routes.isEmpty() && polyline != null) polyline.remove();
-        try {
-            for (Route route : routes) {
-                PolylineOptions polylineOptions = getDefaultPolyLines(route.points);
-                if (polylineStyle == PolylineStyle.DOTTED)
-                    polylineOptions = getDottedPolylines(route.points);
-                polyline = mMap.addPolyline(polylineOptions);
-            }
-        } catch (Exception e) {
-            Toast.makeText(this, "Error occurred on finding the directions...", Toast.LENGTH_SHORT).show();
-        }
-        mMap.animateCamera(buildCameraUpdate(routes.get(0).endLocation), 10, null);
     }
 }

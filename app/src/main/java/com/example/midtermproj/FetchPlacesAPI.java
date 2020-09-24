@@ -11,12 +11,6 @@ import java.net.URL;
 
 public class FetchPlacesAPI {
 
-    public static final String PLACES_API= "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?";
-    public static final String INPUT = "input=";
-    public static final String INPUT_TYPE = "inputtype";
-    public static final String FIELDS = "fields=";
-    public static final String API_KEY="key=";
-
     static String getInfo(String queryString)
     {
         HttpURLConnection urlConnection = null;

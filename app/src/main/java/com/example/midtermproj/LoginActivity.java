@@ -19,7 +19,6 @@ import com.google.firebase.database.ValueEventListener;
 public class LoginActivity extends AppCompatActivity {
     private TextInputLayout textInputUsername;
     private TextInputLayout textInputPassword;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +67,8 @@ public class LoginActivity extends AppCompatActivity {
         final String userEnteredPassword = textInputPassword.getEditText().getText().toString().trim();
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("UserAccount");
-        Query checkUser = reference.orderByChild("userName").equalTo(userEnteredUserName);
+        Query checkUser = reference.orderByChild("userName")
+                        .equalTo(userEnteredUserName);
 
         checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
