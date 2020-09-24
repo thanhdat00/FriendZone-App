@@ -160,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.map:
                 //code xử lý khi bấm menu1
                 intentToShowAllFriend();
-                Toast.makeText(this, "nothing", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.addFriend:
